@@ -1,0 +1,27 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS post;
+
+CREATE TABLE user (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT UNIQUE NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE message (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  reply_post_id INTEGER,
+  body TEXT NOT NULL,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (reply_post_id) REFERENCES message (id)
+);
+
+CREATE TABLE follower (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id INTEGER NOT NULL,
+  follower_id INTEGER,
+  FOREIGN KEY (user_id) REFERENCES user (id),
+  FOREIGN KEY (follower_id) REFERENCES user (id)
+);
+

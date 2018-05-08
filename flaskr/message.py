@@ -1,6 +1,8 @@
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
+
+import time, simplejson
 from flaskr.db import get_db
 
 bp = Blueprint('message', __name__, url_prefix='/message')
@@ -33,12 +35,11 @@ def post():
         if error is None:
             db.execute(
                 'INSERT INTO message (body, user_id, reply_post_id, created_at) VALUES (?, ?, ?, ?)',
-                (body, session.get('user_id'), post_id, timestamp)
-                # timestamp - flaskr timestamp
+                (body, session.get('user_id'), post_id, time.time())
             )
             db.commit()
-            return redirect(url_for('message.index'))
+            result = {'result': True}
+        else:
+            result = {'result': False, 'error': error}
 
-        flash(error)
-
-    return render_template('message/index.html')
+    return simplejson.dump(result)

@@ -2,22 +2,22 @@ from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
 )
 
-import time, simplejson
+import time, simplejson, sys
 from flaskr.db import get_db
 
 bp = Blueprint('message', __name__, url_prefix='/message')
 
 
-@bp.route('/', methods=('GET'))
-def post():
+@bp.route('/')
+def index():
     messages = []
 
     return render_template('message/index.html', messages)
 
 
-@bp.route('/post', methods=('POST'))
+@bp.route('/post')
 def post():
-    if request.method == 'POST':
+    if request.method == 'GET':
         body = request.form['body']
         post_id = request.form['post_id']
         db = get_db()
